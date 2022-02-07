@@ -52,14 +52,14 @@ body {
   max-width: 90px;
   height: 300px;
 }
-.key-8 {
+.key-w {
   margin-left: 50px;
 }
-.key-9 {
+.key-e {
   margin-right: 150px;
   /* background-color: red; */
 }
-.key-12 {
+.key-u {
   margin-right: 140px;
 }
 

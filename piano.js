@@ -1,32 +1,42 @@
-const pianoSMP = './pianoSMP/';
+const chars = ["a", "s", "d", "f", "g", "h", "j", "k", "w", "e", "t", "y", "u"];
+const audioFiles = {};
 
-const audioFiles = [];
-for (let i = 0; i < 13; i++) {
-  audioFiles.push(new Audio(`./pianoSMP/key_${i}.wav`));
-}
+const keys = {};
+const notes = {};
 
-const keys = [...document.querySelectorAll('.key')];
-const chars = ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'w', 'e', 't', 'y', 'u'];
+chars.forEach((char) => {
+  console.log(notes.char);
+  notes[`${char}`] = new Audio(`./pianoSMP/key_${char}.wav`);
+  keys[`${char}`] = document.querySelector(`.key-${char}`);
+});
 
-keys.forEach((key, i) => {
-  document.body.addEventListener('keydown', e => {
-    if (e.key === chars[i]) {
-      key.classList.add('pressed');
-      audioFiles[i].cloneNode(true).play();
-    }
-  });
+//// KEYBOARD ////
+//////////////////
 
-  document.body.addEventListener('keyup', e => {
-    if (e.key === chars[i]) {
-      key.classList.remove('pressed');
-    }
-  });
+document.body.addEventListener("keydown", (e) => {
+  if (!chars.includes(e.key)) return;
+  keys[`${e.key}`].classList.add("pressed");
+  notes[`${e.key}`].play();
+});
 
-  key.addEventListener('touchstart', () => {
-    key.classList.add('pressed');
-    audioFiles[i].cloneNode(true).play();
-  });
-  key.addEventListener('touchend', () => {
-    key.classList.remove('pressed');
-  });
+document.body.addEventListener("keyup", (e) => {
+  if (!chars.includes(e.key)) return;
+  keys[`${e.key}`].classList.remove("pressed");
+  notes[`${e.key}`].pause();
+  notes[`${e.key}`].currentTime = 0;
+});
+
+///// TOUCH //////
+//////////////////
+const keyFromDOM = (e) => e.srcElement.classList[2].slice(-1);
+
+document.body.addEventListener("touchstart", (e) => {
+  keys[`${keyFromDOM(e)}`].classList.add("pressed");
+  notes[`${keyFromDOM(e)}`].play();
+});
+
+document.body.addEventListener("touchend", (e) => {
+  keys[`${keyFromDOM(e)}`].classList.remove("pressed");
+  notes[`${keyFromDOM(e)}`].pause();
+  notes[`${keyFromDOM(e)}`].currentTime = 0;
 });
