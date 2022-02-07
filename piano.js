@@ -8,10 +8,15 @@ chars.forEach((char) => {
 });
 
 const play = (key) => {
+  key = key?.toLowerCase();
+  if (!chars.includes(key)) return;
   keys[`${key}`].classList.add("pressed");
   notes[`${key}`].play();
 };
+
 const stop = (key) => {
+  key = key?.toLowerCase();
+  if (!chars.includes(key)) return;
   keys[`${key}`].classList.remove("pressed");
   notes[`${key}`].pause();
   notes[`${key}`].currentTime = 0;
@@ -19,16 +24,14 @@ const stop = (key) => {
 
 // KEYBOARD
 document.body.addEventListener("keydown", (e) => {
-  if (!chars.includes(e.key)) return;
   play(e.key);
 });
 document.body.addEventListener("keyup", (e) => {
-  if (!chars.includes(e.key)) return;
   stop(e.key);
 });
 
 // TOUCH
-const keyFromDOM = (e) => e.srcElement.classList[2].slice(-1);
+const keyFromDOM = (e) => e?.srcElement?.classList[2]?.slice(-1);
 document.body.addEventListener("touchstart", (e) => {
   play(keyFromDOM(e));
 });

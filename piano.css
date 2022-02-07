@@ -57,14 +57,29 @@ body {
 }
 .key-e {
   margin-right: 150px;
-  /* background-color: red; */
 }
 .key-u {
   margin-right: 140px;
 }
 
 .pressed {
-  /* opacity: 0.8; */
   filter: brightness(80%);
   margin-bottom: 1px;
+}
+.key {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+}
+.key p {
+  font-family: sans-serif;
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+  opacity: 0.2;
+}
+
+.black p {
+  color: #fff;
 }
