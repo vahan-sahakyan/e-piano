@@ -3,49 +3,43 @@ const keys = {};
 const notes = {};
 
 chars.forEach((char) => {
-  notes[`${char}`] = new Audio(`./pianoSMP/key_${char}.wav`);
+  notes[`${char}`] = new Audio(`./pianoSMP/key_${char}.mp3`);
   keys[`${char}`] = document.querySelector(`.key-${char}`);
 });
 
-//// KEYBOARD ////
-//////////////////
+const play = (key) => {
+  keys[`${key}`].classList.add("pressed");
+  notes[`${key}`].play();
+};
+const stop = (key) => {
+  keys[`${key}`].classList.remove("pressed");
+  notes[`${key}`].pause();
+  notes[`${key}`].currentTime = 0;
+};
+
+// KEYBOARD
 document.body.addEventListener("keydown", (e) => {
   if (!chars.includes(e.key)) return;
-  keys[`${e.key}`].classList.add("pressed");
-  notes[`${e.key}`].play();
+  play(e.key);
 });
-
 document.body.addEventListener("keyup", (e) => {
   if (!chars.includes(e.key)) return;
-  keys[`${e.key}`].classList.remove("pressed");
-  notes[`${e.key}`].pause();
-  notes[`${e.key}`].currentTime = 0;
+  stop(e.key);
 });
 
-///// TOUCH //////
-//////////////////
+// TOUCH
 const keyFromDOM = (e) => e.srcElement.classList[2].slice(-1);
-
 document.body.addEventListener("touchstart", (e) => {
-  keys[`${keyFromDOM(e)}`].classList.add("pressed");
-  notes[`${keyFromDOM(e)}`].play();
+  play(keyFromDOM(e));
 });
-
 document.body.addEventListener("touchend", (e) => {
-  keys[`${keyFromDOM(e)}`].classList.remove("pressed");
-  notes[`${keyFromDOM(e)}`].pause();
-  notes[`${keyFromDOM(e)}`].currentTime = 0;
+  stop(keyFromDOM(e));
 });
 
-///// CLICK //////
-//////////////////
+// CLICK
 document.body.addEventListener("mousedown", (e) => {
-  keys[`${keyFromDOM(e)}`].classList.add("pressed");
-  notes[`${keyFromDOM(e)}`].play();
+  play(keyFromDOM(e));
 });
-
 document.body.addEventListener("mouseup", (e) => {
-  keys[`${keyFromDOM(e)}`].classList.remove("pressed");
-  notes[`${keyFromDOM(e)}`].pause();
-  notes[`${keyFromDOM(e)}`].currentTime = 0;
+  stop(keyFromDOM(e));
 });
