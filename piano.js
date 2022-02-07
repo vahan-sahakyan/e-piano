@@ -1,18 +1,14 @@
 const chars = ["a", "s", "d", "f", "g", "h", "j", "k", "w", "e", "t", "y", "u"];
-const audioFiles = {};
-
 const keys = {};
 const notes = {};
 
 chars.forEach((char) => {
-  console.log(notes.char);
   notes[`${char}`] = new Audio(`./pianoSMP/key_${char}.wav`);
   keys[`${char}`] = document.querySelector(`.key-${char}`);
 });
 
 //// KEYBOARD ////
 //////////////////
-
 document.body.addEventListener("keydown", (e) => {
   if (!chars.includes(e.key)) return;
   keys[`${e.key}`].classList.add("pressed");
@@ -36,6 +32,19 @@ document.body.addEventListener("touchstart", (e) => {
 });
 
 document.body.addEventListener("touchend", (e) => {
+  keys[`${keyFromDOM(e)}`].classList.remove("pressed");
+  notes[`${keyFromDOM(e)}`].pause();
+  notes[`${keyFromDOM(e)}`].currentTime = 0;
+});
+
+///// CLICK //////
+//////////////////
+document.body.addEventListener("mousedown", (e) => {
+  keys[`${keyFromDOM(e)}`].classList.add("pressed");
+  notes[`${keyFromDOM(e)}`].play();
+});
+
+document.body.addEventListener("mouseup", (e) => {
   keys[`${keyFromDOM(e)}`].classList.remove("pressed");
   notes[`${keyFromDOM(e)}`].pause();
   notes[`${keyFromDOM(e)}`].currentTime = 0;
