@@ -10,24 +10,32 @@
     <title>E-Piano</title>
   </head>
   <body>
-    <div class="piano-container">
-      <div class="white-container">
-        <div class="key white key-a"><p>A</p></div>
-        <div class="key white key-s"><p>S</p></div>
-        <div class="key white key-d"><p>D</p></div>
-        <div class="key white key-f"><p>F</p></div>
-        <div class="key white key-g"><p>G</p></div>
-        <div class="key white key-h"><p>H</p></div>
-        <div class="key white key-j"><p>J</p></div>
-        <div class="key white key-k"><p>K</p></div>
+    <div class="piano">
+      <div class="piano-container">
+        <div class="white-container">
+          <div class="key white key-a"><p>A</p></div>
+          <div class="key white key-s"><p>S</p></div>
+          <div class="key white key-d"><p>D</p></div>
+          <div class="key white key-f"><p>F</p></div>
+          <div class="key white key-g"><p>G</p></div>
+          <div class="key white key-h"><p>H</p></div>
+          <div class="key white key-j"><p>J</p></div>
+          <div class="key white key-k"><p>K</p></div>
+        </div>
+        <div class="black-container">
+          <div class="key black key-w"><p>W</p></div>
+          <div class="key black key-e"><p>E</p></div>
+          <div class="key black key-t"><p>T</p></div>
+          <div class="key black key-y"><p>Y</p></div>
+          <div class="key black key-u"><p>U</p></div>
+        </div>
       </div>
-      <div class="black-container">
-        <div class="key black key-w"><p>W</p></div>
-        <div class="key black key-e"><p>E</p></div>
-        <div class="key black key-t"><p>T</p></div>
-        <div class="key black key-y"><p>Y</p></div>
-        <div class="key black key-u"><p>U</p></div>
-      </div>
+    </div>
+    <div class="sustain">
+      <p class="pedal-status">
+        <span>PRESS 'P'</span> SUSTAIN PEDAL
+        <span class="sustain-toggle">OFF</span>
+      </p>
     </div>
     <script src="piano.js"></script>
   </body>

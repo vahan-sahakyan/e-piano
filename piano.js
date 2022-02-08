@@ -1,6 +1,8 @@
 const chars = ["a", "s", "d", "f", "g", "h", "j", "k", "w", "e", "t", "y", "u"];
 const keys = {};
 const notes = {};
+const sustain = document.querySelector(".sustain");
+const pedalStatus = document.querySelector(".sustain-toggle");
 
 chars.forEach((char) => {
   notes[`${char}`] = new Audio(`./pianoSMP/key_${char}.mp3`);
@@ -13,11 +15,16 @@ document.body.addEventListener("keydown", (e) => {
   if (e.repeat) return;
   if (`${e.key}`.toLowerCase() === "p") {
     isSustained = true;
+    sustain.style.backgroundColor = "#262";
+    pedalStatus.textContent = "ON";
   }
 });
 document.body.addEventListener("keyup", (e) => {
   if (`${e.key}`.toLowerCase() === "p") {
     isSustained = false;
+
+    sustain.style.backgroundColor = "#444";
+    pedalStatus.textContent = "OFF";
 
     const playingNotes = chars
       .filter(
