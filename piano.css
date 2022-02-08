@@ -22,12 +22,12 @@ body {
 /* } */
 
 .sustain {
-  /* flex: 0.2; */
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: #444;
-  width: 1200px;
+  max-width: 1200px;
+  width: 100vw;
   height: 70px;
   margin: 0 auto;
 }
