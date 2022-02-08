@@ -7,10 +7,35 @@ chars.forEach((char) => {
   keys[`${char}`] = document.querySelector(`.key-${char}`);
 });
 
+// SUSTAIN PEDAL
+let isSustained = false;
+document.body.addEventListener("keydown", (e) => {
+  if (e.repeat) return;
+  if (`${e.key}`.toLowerCase() === "p") {
+    isSustained = true;
+  }
+});
+document.body.addEventListener("keyup", (e) => {
+  if (`${e.key}`.toLowerCase() === "p") {
+    isSustained = false;
+
+    const playingNotes = chars
+      .filter(
+        (char) =>
+          !notes[`${char}`].paused &&
+          !keys[`${char}`].className.includes("pressed")
+      )
+      .map((playingChar) => notes[`${playingChar}`]);
+
+    playingNotes.forEach((playingNote) => playingNote.pause());
+  }
+});
+
 const play = (key) => {
   key = key?.toLowerCase();
   if (!chars.includes(key)) return;
   keys[`${key}`].classList.add("pressed");
+  notes[`${key}`].currentTime = 0;
   notes[`${key}`].play();
 };
 
@@ -18,12 +43,14 @@ const stop = (key) => {
   key = key?.toLowerCase();
   if (!chars.includes(key)) return;
   keys[`${key}`].classList.remove("pressed");
-  notes[`${key}`].pause();
-  notes[`${key}`].currentTime = 0;
+
+  !isSustained && notes[`${key}`].pause();
 };
 
 // KEYBOARD
 document.body.addEventListener("keydown", (e) => {
+  if (e.repeat) return;
+  // console.log(e.key);
   play(e.key);
 });
 document.body.addEventListener("keyup", (e) => {
