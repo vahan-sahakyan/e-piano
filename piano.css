@@ -13,20 +13,13 @@ body {
   background-color: #222;
 }
 
-/* .piano { */
-/* display: flex; */
-/* height: 100vh; */
-/* flex-direction: column; */
-/* justify-content: space-between; */
-/* align-items: center; */
-/* } */
-
 .sustain {
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: #444;
   max-width: 1200px;
+  min-width: 1000px;
   width: 100vw;
   height: 70px;
   margin: 0 auto;
@@ -40,6 +33,10 @@ body {
 .pedal-status span {
   filter: brightness(90%);
   font-weight: 100;
+}
+.piano {
+  cursor: pointer;
+  min-width: 1000px;
 }
 
 .piano-container {
