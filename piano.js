@@ -1,117 +1,124 @@
-const chars = ["a", "s", "d", "f", "g", "h", "j", "k", "w", "e", "t", "y", "u"];
-const keys = {};
-const notes = {};
-const sustain = document.querySelector(".sustain");
-const pedalStatus = document.querySelector(".sustain-toggle");
-
-chars.forEach((char) => {
-  notes[`${char}`] = new Audio(`./pianoSMP/key_${char}.mp3`);
-  keys[`${char}`] = document.querySelector(`.key-${char}`);
-});
-
-/////////////////////////////////////////////
-// SUSTAIN PEDAL
-
-let isSustained = false;
-const sustainON = function () {
-  isSustained = true;
-  sustain.style.backgroundColor = "#262";
-  pedalStatus.textContent = "ON";
-};
-const sustainOFF = function () {
+class Piano {
+  #chars = ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'w', 'e', 't', 'y', 'u'];
+  keys = {};
+  notes = {};
+  sustain = document.querySelector('.sustain');
+  pedalStatus = document.querySelector('.sustain-toggle');
   isSustained = false;
 
-  sustain.style.backgroundColor = "#444";
-  pedalStatus.textContent = "OFF";
+  constructor() {
+    this.#chars.forEach(char => {
+      this.notes[`${char}`] = new Audio(`./pianoSMP/key_${char}.mp3`);
+      this.keys[`${char}`] = document.querySelector(`.key-${char}`);
+    });
 
-  const playingNotes = chars
-    .filter(
-      (char) =>
-        !notes[`${char}`].paused &&
-        !keys[`${char}`].className.includes("pressed")
-    )
-    .map((playingChar) => notes[`${playingChar}`]);
+    // Click Toggle
+    this.sustain.addEventListener('click', () =>
+      this.isSustained ? this.sustainOFF() : this.sustainON()
+    );
+    // Key Hold
+    document.addEventListener('keydown', e => {
+      if (e.repeat) return;
+      if (`${e.key}`.toLowerCase() === 'p') {
+        this.sustainON();
+      }
+    });
+    document.addEventListener('keyup', e => {
+      if (`${e.key}`.toLowerCase() === 'p') {
+        this.sustainOFF();
+      }
+    });
 
-  playingNotes.forEach((playingNote) => playingNote.pause());
-};
+    document.body.addEventListener('keydown', this.handleKeyDown);
+    document.body.addEventListener('keyup', this.handleKeyUp);
 
-// Click Toggle
+    document.body.addEventListener('touchstart', this.handleTouchStart);
+    document.body.addEventListener('touchend', this.handleTouchEnd);
 
-sustain.addEventListener("click", () =>
-  isSustained ? sustainOFF() : sustainON()
-);
-
-document.addEventListener("keydown", (e) => {
-  if (e.repeat) return;
-  if (`${e.key}`.toLowerCase() === "p") {
-    sustainON();
+    document.body.addEventListener('mousedown', this.handleMouseDown);
+    document.body.addEventListener('mouseup', this.handleMouseUp);
   }
-});
-document.addEventListener("keyup", (e) => {
-  if (`${e.key}`.toLowerCase() === "p") {
-    sustainOFF();
-  }
-});
 
-const play = (key) => {
-  key = key?.toLowerCase();
-  if (!chars.includes(key)) return;
-  keys[`${key}`].classList.add("pressed");
-  notes[`${key}`].currentTime = 0;
-  notes[`${key}`].play();
-  console.log("play");
-};
+  play = key => {
+    key = key?.toLowerCase();
+    if (!this.#chars.includes(key)) return;
+    this.keys[`${key}`].classList.add('pressed');
+    this.notes[`${key}`].currentTime = 0;
+    this.notes[`${key}`].play();
+    // console.log('play');
+  };
 
-const stop = (key) => {
-  key = key?.toLowerCase();
-  if (!chars.includes(key)) return;
-  keys[`${key}`].classList.remove("pressed");
+  stop = key => {
+    key = key?.toLowerCase();
+    if (!this.#chars.includes(key)) return;
+    this.keys[`${key}`].classList.remove('pressed');
 
-  !isSustained && notes[`${key}`].pause();
-  console.log("stop");
-};
+    !this.isSustained && this.notes[`${key}`].pause();
+    // console.log('stop');
+  };
 
-/////////////////////////////////////////////
-// KEYBOARD
+  /////////////////////////////////////////////
+  // SUSTAIN PEDAL
 
-const handleKeyDown = function (e) {
-  if (e.repeat) return;
-  play(e.key);
-};
-const handleKeyUp = function (e) {
-  stop(e.key);
-};
-document.body.addEventListener("keydown", handleKeyDown);
-document.body.addEventListener("keyup", handleKeyUp);
+  sustainON = () => {
+    this.isSustained = true;
+    this.sustain.style.backgroundColor = '#262';
+    this.pedalStatus.textContent = 'ON';
+  };
+  sustainOFF = () => {
+    this.isSustained = false;
 
-/////////////////////////////////////////////
-// TOUCH
+    this.sustain.style.backgroundColor = '#444';
+    this.pedalStatus.textContent = 'OFF';
 
-const keyFromDOM = (e) => e?.target?.closest(".key")?.classList[2]?.slice(-1);
+    const playingNotes = this.#chars
+      .filter(
+        char =>
+          !this.notes[`${char}`].paused &&
+          !this.keys[`${char}`].className.includes('pressed')
+      )
+      .map(playingChar => this.notes[`${playingChar}`]);
 
-const handleTouchStart = function (e) {
-  e.stopPropagation();
-  play(keyFromDOM(e));
-};
-const handleTouchEnd = function (e) {
-  e.stopPropagation();
-  stop(keyFromDOM(e));
-};
+    playingNotes.forEach(playingNote => playingNote.pause());
+  };
 
-document.body.addEventListener("touchstart", handleTouchStart);
-document.body.addEventListener("touchend", handleTouchEnd);
+  /////////////////////////////////////////////
+  // KEYBOARD
 
-///////////////////////////////////////////
-// CLICK
+  handleKeyDown = e => {
+    if (e.repeat) return;
+    this.play(e.key);
+  };
+  handleKeyUp = e => {
+    this.stop(e.key);
+  };
 
-const handleMouseDown = function (e) {
-  e.stopPropagation();
-  play(keyFromDOM(e));
-};
-const handleMouseUp = function (e) {
-  e.stopPropagation();
-  stop(keyFromDOM(e));
-};
+  keyFromDOM = e => e?.target?.closest('.key')?.classList[2]?.slice(-1);
 
-document.body.addEventListener("mousedown", handleMouseDown);
-document.body.addEventListener("mouseup", handleMouseUp);
+  /////////////////////////////////////////////
+  // TOUCH
+
+  handleTouchStart = e => {
+    e.stopPropagation();
+    this.play(this.keyFromDOM(e));
+  };
+  handleTouchEnd = e => {
+    e.stopPropagation();
+    this.stop(this.keyFromDOM(e));
+  };
+
+  ///////////////////////////////////////////
+  // CLICK
+
+  handleMouseDown = e => {
+    e.stopPropagation();
+    this.play(this.keyFromDOM(e));
+  };
+  handleMouseUp = e => {
+    e.stopPropagation();
+    this.stop(this.keyFromDOM(e));
+  };
+}
+// END of class PIANO
+
+const piano = new Piano();
