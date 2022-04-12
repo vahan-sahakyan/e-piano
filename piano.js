@@ -1,20 +1,20 @@
 class Piano {
   #chars = ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'w', 'e', 't', 'y', 'u'];
-  keys = {};
-  notes = {};
+  #keys = {};
+  #notes = {};
+  #isSustained = false;
   sustain = document.querySelector('.sustain');
   pedalStatus = document.querySelector('.sustain-toggle');
-  isSustained = false;
 
   constructor() {
     this.#chars.forEach(char => {
-      this.notes[`${char}`] = new Audio(`./pianoSMP/key_${char}.mp3`);
-      this.keys[`${char}`] = document.querySelector(`.key-${char}`);
+      this.#notes[`${char}`] = new Audio(`./pianoSMP/key_${char}.mp3`);
+      this.#keys[`${char}`] = document.querySelector(`.key-${char}`);
     });
 
     // Click Toggle
     this.sustain.addEventListener('click', () =>
-      this.isSustained ? this.sustainOFF() : this.sustainON()
+      this.#isSustained ? this.sustainOFF() : this.sustainON()
     );
     // Key Hold
     document.addEventListener('keydown', e => {
@@ -42,18 +42,18 @@ class Piano {
   play = key => {
     key = key?.toLowerCase();
     if (!this.#chars.includes(key)) return;
-    this.keys[`${key}`].classList.add('pressed');
-    this.notes[`${key}`].currentTime = 0;
-    this.notes[`${key}`].play();
+    this.#keys[`${key}`].classList.add('pressed');
+    this.#notes[`${key}`].currentTime = 0;
+    this.#notes[`${key}`].play();
     // console.log('play');
   };
 
   stop = key => {
     key = key?.toLowerCase();
     if (!this.#chars.includes(key)) return;
-    this.keys[`${key}`].classList.remove('pressed');
+    this.#keys[`${key}`].classList.remove('pressed');
 
-    !this.isSustained && this.notes[`${key}`].pause();
+    !this.#isSustained && this.#notes[`${key}`].pause();
     // console.log('stop');
   };
 
@@ -61,12 +61,12 @@ class Piano {
   // SUSTAIN PEDAL
 
   sustainON = () => {
-    this.isSustained = true;
+    this.#isSustained = true;
     this.sustain.style.backgroundColor = '#262';
     this.pedalStatus.textContent = 'ON';
   };
   sustainOFF = () => {
-    this.isSustained = false;
+    this.#isSustained = false;
 
     this.sustain.style.backgroundColor = '#444';
     this.pedalStatus.textContent = 'OFF';
@@ -74,10 +74,10 @@ class Piano {
     const playingNotes = this.#chars
       .filter(
         char =>
-          !this.notes[`${char}`].paused &&
-          !this.keys[`${char}`].className.includes('pressed')
+          !this.#notes[`${char}`].paused &&
+          !this.#keys[`${char}`].className.includes('pressed')
       )
-      .map(playingChar => this.notes[`${playingChar}`]);
+      .map(playingChar => this.#notes[`${playingChar}`]);
 
     playingNotes.forEach(playingNote => playingNote.pause());
   };
