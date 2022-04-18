@@ -12,8 +12,6 @@ class Piano {
     this.addKeyboardHandlers();
     this.addTouchHandlers();
     this.addMouseHandlers();
-
-    console.log(this.#notes);
   }
 
   assignSamplesToNotes() {
