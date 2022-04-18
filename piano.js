@@ -7,11 +7,27 @@ class Piano {
   pedalStatus = document.querySelector('.sustain-toggle');
 
   constructor() {
+    this.assignSamplesToNotes();
+    this.addSustainHandlers();
+    this.addKeyboardHandlers();
+    this.addTouchHandlers();
+    this.addMouseHandlers();
+
+    console.log(this.#notes);
+  }
+
+  assignSamplesToNotes() {
     this.#chars.forEach(char => {
-      this.#notes[`${char}`] = new Audio(`./pianoSMP/key_${char}.mp3`);
+      this.#notes[`${char}`] = new Audio(`./pianoSamples/key_${char}.mp3`);
       this.#keys[`${char}`] = document.querySelector(`.key-${char}`);
     });
+  }
 
+  //////////////////
+  // HANDLERS
+  //////////////////
+
+  addSustainHandlers() {
     // Click Toggle
     this.sustain.addEventListener('click', () =>
       this.#isSustained ? this.sustainOFF() : this.sustainON()
@@ -28,16 +44,24 @@ class Piano {
         this.sustainOFF();
       }
     });
+  }
 
+  addKeyboardHandlers() {
     document.body.addEventListener('keydown', this.handleKeyDown);
     document.body.addEventListener('keyup', this.handleKeyUp);
-
+  }
+  addTouchHandlers() {
     document.body.addEventListener('touchstart', this.handleTouchStart);
     document.body.addEventListener('touchend', this.handleTouchEnd);
-
+  }
+  addMouseHandlers() {
     document.body.addEventListener('mousedown', this.handleMouseDown);
     document.body.addEventListener('mouseup', this.handleMouseUp);
   }
+
+  //////////////////
+  // PLAY-STOP LOGIC
+  //////////////////
 
   play = key => {
     key = key?.toLowerCase();
@@ -57,8 +81,9 @@ class Piano {
     // console.log('stop');
   };
 
-  /////////////////////////////////////////////
-  // SUSTAIN PEDAL
+  //////////////////
+  // SUSTAIN LOGIC
+  //////////////////
 
   sustainON = () => {
     this.#isSustained = true;
@@ -82,8 +107,9 @@ class Piano {
     playingNotes.forEach(playingNote => playingNote.pause());
   };
 
-  /////////////////////////////////////////////
-  // KEYBOARD
+  //////////////////
+  // KEYBOARD LOGIC
+  //////////////////
 
   handleKeyDown = e => {
     if (e.repeat) return;
@@ -95,8 +121,9 @@ class Piano {
 
   keyFromDOM = e => e?.target?.closest('.key')?.classList[2]?.slice(-1);
 
-  /////////////////////////////////////////////
-  // TOUCH
+  //////////////////
+  // TOUCH LOGIC
+  //////////////////
 
   handleTouchStart = e => {
     e.stopPropagation();
@@ -107,8 +134,9 @@ class Piano {
     this.stop(this.keyFromDOM(e));
   };
 
-  ///////////////////////////////////////////
-  // CLICK
+  //////////////////
+  // MOUSE LOGIC
+  //////////////////
 
   handleMouseDown = e => {
     e.stopPropagation();
