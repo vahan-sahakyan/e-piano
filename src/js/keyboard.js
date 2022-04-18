@@ -1,12 +1,14 @@
-class Piano {
+class Keyboard {
   #chars = ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'w', 'e', 't', 'y', 'u'];
   #keys = {};
   #notes = {};
   #isSustained = false;
   sustain = document.querySelector('.sustain');
   pedalStatus = document.querySelector('.sustain-toggle');
+  #instrument = '';
 
-  constructor() {
+  constructor(instrument) {
+    this.#instrument = instrument;
     this.assignSamplesToNotes();
     this.addSustainHandlers();
     this.addKeyboardHandlers();
@@ -16,7 +18,9 @@ class Piano {
 
   assignSamplesToNotes() {
     this.#chars.forEach(char => {
-      this.#notes[`${char}`] = new Audio(`./pianoSamples/key_${char}.mp3`);
+      this.#notes[`${char}`] = new Audio(
+        `./src/${this.#instrument}Samples/key_${char}.mp3`
+      );
       this.#keys[`${char}`] = document.querySelector(`.key-${char}`);
     });
   }
@@ -147,4 +151,4 @@ class Piano {
 }
 // END of class PIANO
 
-const piano = new Piano();
+export default Keyboard;
