@@ -149,6 +149,6 @@ class Keyboard {
     this.stop(this.keyFromDOM(e));
   };
 }
-// END of class PIANO
+// END of class KEYBOARD
 
 export default Keyboard;
